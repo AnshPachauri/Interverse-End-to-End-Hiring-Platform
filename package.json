@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/AnshPachauri/Interverse-End-to-End-Hiring-Platform#readme",
   "dependencies": {
-    "@clerk/clerk-react": "^5.53.4"
+    "@clerk/clerk-react": "^5.53.4",
+    "cors": "^2.8.1"
   }
 }
