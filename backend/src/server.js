@@ -1,6 +1,7 @@
 import express from 'express';
 import path from 'path';
 import { ENV } from './lib/env.js';
+import { connectDB } from './lib/db.js';
 
 const app = express();
 
@@ -20,6 +21,16 @@ if(ENV.NODE_ENV === 'production') {
         res.sendFile(path.join(__dirname,'../frontend/dist/index.html')); // any end point apart from '/world' &&'/books' will be served by index.html i.e react app
     })
 }
-app.listen(ENV.PORT,() => {
-    console.log(`Server is running on port ${ENV.PORT}`)
-})
+
+const startServer = async () => {
+    try{
+        await connectDB();
+        app.listen(ENV.PORT, () => {
+            console.log(`Server started on port ${ENV.PORT}`);
+        });
+    }catch(err){
+        console.error("Error in starting server",err);
+    }
+}
+
+startServer();
