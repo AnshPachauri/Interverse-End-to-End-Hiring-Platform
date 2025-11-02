@@ -38,7 +38,8 @@ export async function createSession(req,res){
 
 
     }catch(err){
-
+        console.error("Error in creating session",err);
+        res.status(500).json({message : "Internal Server Error"});
     }
 }
 
@@ -59,7 +60,7 @@ export async function getMyRecentSessions(req,res){
     // get those sessions in which suer was either a host or a participant
     try{
         const userId = req.user._id;
-        await Session.find({status : "completed" , $or : [{host : userId},{participant : userId}]})
+        const sessions =await Session.find({status : "completed" , $or : [{host : userId},{participant : userId}]})
         .sort({createdAt : -1})
         .limit(20);
 
@@ -96,6 +97,13 @@ export async function joinSession(req,res){
         const session = await Session.findById(id);
         if(!session){
             return res.status(404).send("Session not found");
+        }
+        if(session.status !== "active"){
+            return res.status(400).send("Session is not active");
+        }
+        // host can not be a participant
+        if(session.host.toString() === userId.toString()){
+            return res.status(400).send("You are already the host of this session");
         }
         // check if session already has a participant
         if(session.participant){
@@ -134,9 +142,6 @@ export async function endSession(req,res){
             return res.status(400).send("Session is already completed");
         }
 
-        session.status = "completed";
-        await session.save();
-
         // delete stream video call
         const call = streamClient.video.call("default",session.callId);
         await call.delete({hard : true});
@@ -144,6 +149,9 @@ export async function endSession(req,res){
         const channel = chatClient.channel("messaging",session.callId);
         await channel.delete();
 
+        session.status = "completed";
+        await session.save();
+        
         res.status(200).json({session, message : "Session ended successfully"});
     }catch(err){
         console.error("Error in ending session",err);
