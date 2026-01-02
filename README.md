@@ -59,27 +59,27 @@ Built to simulate **FAANG-style coding interviews**, not just practice problems.
 ## 📸 Screenshots
 
 ### Landing Page
-![Landing Page](./landing.png)
+![Landing Page](./screenshots/landing.png)
 
 ---
 
 ### Dashboard & Live Sessions
-![Dashboard](./dashboard.png)
+![Dashboard](./screenshots/dashboard.png)
 
 ---
 
 ### Problem Library
-![Problems](./problems.png)
+![Problems](./screenshots/Problems.png)
 
 ---
 
 ### Coding Interface
-![Code Editor](./editor.png)
+![Code Editor](./screenshots/editor.png)
 
 ---
 
 ### Live Interview Session
-![Live Interview](./interview.png)
+![Live Interview](./screenshots/interview.png)
 
 ---
 
